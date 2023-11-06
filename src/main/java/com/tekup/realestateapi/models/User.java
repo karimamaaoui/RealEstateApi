@@ -1,24 +1,28 @@
 package com.tekup.realestateapi.models;
-
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import com.tekup.realestateapi.models.Role;
 
 @Getter
 @Setter
@@ -30,20 +34,24 @@ import com.tekup.realestateapi.models.Role;
 public class User implements UserDetails {
 	@Id
 	@GeneratedValue
+    @Column(name = "id_user")
 	private Integer idUser;
     private String firstname;
     private String lastname;
     private String email;
     private String password;
     
-    @Enumerated(EnumType.STRING)
-    private Role role = Role.CLIENT;
+    /*@ManyToOne()
+    @JoinColumn(name = "role_id")
+    private Role role_id;
+    */
+    
+    @ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(	name = "user_roles", 
+				joinColumns = @JoinColumn(name = "user_id"), 
+				inverseJoinColumns = @JoinColumn(name = "role_id"))
+	private Set<Role> roles = new HashSet<>();
 
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public String getUsername() {
@@ -72,6 +80,14 @@ public class User implements UserDetails {
 	public boolean isEnabled() {
 		// TODO Auto-generated method stub
 		return true;
+	}
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+	    List<GrantedAuthority> authorities = new ArrayList<>();
+	    for (Role role : roles) {
+	        authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName()));
+	    }
+	    return authorities;
 	}
 
     

@@ -13,49 +13,52 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tekup.realestateapi.models.Role;
 import com.tekup.realestateapi.models.User;
+import com.tekup.realestateapi.service.RoleService;
 import com.tekup.realestateapi.service.UserService;
 
-
 @RestController
-@RequestMapping("/user")
-public class UserController {
+@RequestMapping("/role")
+public class RoleController {
+
 	
 	@Autowired
-    private UserService userService;
+    private RoleService roleService;
 
     /**
-     * add user
+     * add role
      */
 
     @PostMapping("/add")
-    public String addUser(@RequestBody User user) {
+    public String addRole(@RequestBody Role role) {
     	
-        userService.addUser(user);
+        roleService.addRole(role);
 
-        return "success add user";
+        return "success add role";
     }
     
     /**
-     * get users as list
+     * get roles as list
      */
 
-    @GetMapping
-    public List<User> getUsers() {
-        return userService.getUsers();
+    @GetMapping("/getall")
+    public List<Role> getRoles() {
+        return roleService.getRoles();
     }
 
     /**
-     * get user by id
+     * get role by id
      */
 
-    @GetMapping("/get")
-    public User getUser(@RequestParam Integer id) {
-        return userService.getUser(id);
+    @GetMapping("/get/{id}")
+    public Role getRoles(@PathVariable Long id) {
+        return roleService.getRole(id);
     }
+
     @DeleteMapping("delete/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Integer id){
-        userService.deleteUser(id);
+    public ResponseEntity<Void> deleteRoles(@PathVariable Long id){
+    	roleService.deleteRole(id);
 
         return ResponseEntity.noContent().build();
     }

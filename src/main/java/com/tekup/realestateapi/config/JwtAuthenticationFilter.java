@@ -1,6 +1,8 @@
 package com.tekup.realestateapi.config;
 
 import java.io.IOException;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,17 +35,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-//        try {
-//            Thread.sleep(500);
-//        } catch (InterruptedException e) {
-//            throw new RuntimeException(e);
-//        }
+
         //Authorization
 
         String requestHeader = request.getHeader("Authorization");
         //Bearer 2352345235sdfrsfgsdfsdf
         logger.info(" Header :  {}", requestHeader);
         String username = null;
+        String roles=null;
         String token = null;
         if (requestHeader != null && requestHeader.startsWith("Bearer")) {
             //looking good
@@ -51,6 +50,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             try {
 
                 username = this.jwtHelper.getUsernameFromToken(token);
+                roles = this.jwtHelper.getRolesFromToken(token);
 
             } catch (IllegalArgumentException e) {
                 logger.info("Illegal Argument while fetching the username !!");
@@ -72,12 +72,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
 
-        //
+     
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
 
             //fetch user detail from username
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+
             Boolean validateToken = this.jwtHelper.validateToken(token, userDetails);
             if (validateToken) {
 

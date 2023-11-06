@@ -45,7 +45,10 @@ public class SecurityConfiguration {
         .cors(cors->cors.disable())
         .authorizeHttpRequests(
         		auth->auth.requestMatchers("/home/**").authenticated()
-        		.requestMatchers("/auth/login").permitAll().requestMatchers("/auth/register").permitAll().anyRequest().authenticated())
+        		.requestMatchers("/auth/login").permitAll()
+        		.requestMatchers("/auth/register").permitAll()
+        		.requestMatchers("/role/**").authenticated()
+        		.anyRequest().authenticated())
         		.exceptionHandling(ex->ex.authenticationEntryPoint(jwtAuthentication))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 		

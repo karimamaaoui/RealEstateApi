@@ -1,7 +1,9 @@
 package com.tekup.realestateapi.serviceImp;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,7 +11,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.tekup.realestateapi.models.ERole;
+import com.tekup.realestateapi.models.Role;
 import com.tekup.realestateapi.models.User;
+import com.tekup.realestateapi.repository.RoleRepository;
 import com.tekup.realestateapi.repository.UserRepository;
 import com.tekup.realestateapi.service.UserService;
 
@@ -21,11 +26,16 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
     
+    @Autowired
+    private RoleRepository roleRepository;
+    
     /**
      * add user
      */
     @Override
     public void addUser(User user) {
+       // Role defaultRole = roleRepository.findById(Long.valueOf(1)).orElse(null);
+       // user.setRoles(defaultRole);
         userRepository.save(user);
     }
 
@@ -70,8 +80,19 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User createUser(User user) {
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		return userRepository.save(user);
+	   /*Role userRole = roleRepository.findByName(ERole.CLIENT)
+	            .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+	    
+	    user.setRole_id(userRole);
+	    */
+		  Set<Role> roles = new HashSet<>();
+		    Role userRole = roleRepository.findByName(ERole.CLIENT)
+		            .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+		        roles.add(userRole);
+		        user.setRoles(roles);
+	    user.setPassword(passwordEncoder.encode(user.getPassword()));
+	    return userRepository.save(user);
 	}
+
 
 }

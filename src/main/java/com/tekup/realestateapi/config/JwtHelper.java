@@ -2,6 +2,7 @@ package com.tekup.realestateapi.config;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -24,6 +25,11 @@ public class JwtHelper {
     //retrieve username from jwt token
     public String getUsernameFromToken(String token) {
         return getClaimFromToken(token, Claims::getSubject);
+    }
+
+    public String getRolesFromToken(String token) {
+        List<String> roles = getClaimFromToken(token, claims -> claims.get("roles", List.class));
+        return String.join(",", roles); // Convert the list of roles to a comma-separated string
     }
 
     //retrieve expiration date from jwt token
@@ -50,6 +56,9 @@ public class JwtHelper {
     //generate token for user
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
+        claims.put("username", userDetails.getUsername());
+
+        claims.put("roles", userDetails.getAuthorities()); 
         return doGenerateToken(claims, userDetails.getUsername());
     }
 
