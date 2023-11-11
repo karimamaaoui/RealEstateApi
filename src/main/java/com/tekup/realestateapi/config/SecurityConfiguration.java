@@ -47,6 +47,10 @@ public class SecurityConfiguration {
         		auth->auth.requestMatchers("/home/**").hasRole("ADMIN")
         		.requestMatchers("/auth/login").permitAll()
         		.requestMatchers("/auth/register").permitAll()
+        		.requestMatchers("/category/list").hasAnyRole("ADMIN","CLIENT")
+        		.requestMatchers("/category/get").hasAnyRole("ADMIN","CLIENT")
+        		.requestMatchers("/category/**").hasRole("ADMIN") 
+
         		.anyRequest().authenticated())
         		.exceptionHandling(ex->ex.authenticationEntryPoint(jwtAuthentication))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
