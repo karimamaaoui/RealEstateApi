@@ -16,6 +16,7 @@ import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -44,15 +45,19 @@ public class User implements UserDetails {
     /*@ManyToOne()
     @JoinColumn(name = "role_id")
     private Role role_id;
-    */
+  */
     
     @ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(	name = "user_roles", 
 				joinColumns = @JoinColumn(name = "user_id"), 
 				inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles = new HashSet<>();
+  
 
-
+   /* @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "role_id")
+    private Role role;
+    */
 	@Override
 	public String getUsername() {
 		return this.email;
@@ -81,6 +86,7 @@ public class User implements UserDetails {
 		// TODO Auto-generated method stub
 		return true;
 	}
+	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 	    List<GrantedAuthority> authorities = new ArrayList<>();
@@ -90,5 +96,4 @@ public class User implements UserDetails {
 	    return authorities;
 	}
 
-    
-}
+	}

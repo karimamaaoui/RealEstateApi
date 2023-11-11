@@ -62,11 +62,15 @@ public class AuthController {
 	                .collect(Collectors.toList());
 	        }
 
+	       
 	        JwtResponse response = JwtResponse.builder()
 	                .jwtToken(token)
 	                .username(userDetails.getUsername())
 	                .roles(roleNames)
 	                .build();
+	        
+			System.out.println("login role : "+roleNames);
+
 	        return new ResponseEntity<>(response, HttpStatus.OK);
 	    }
 	  

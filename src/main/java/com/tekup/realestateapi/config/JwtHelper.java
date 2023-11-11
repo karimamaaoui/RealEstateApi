@@ -1,11 +1,16 @@
 package com.tekup.realestateapi.config;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -26,12 +31,69 @@ public class JwtHelper {
     public String getUsernameFromToken(String token) {
         return getClaimFromToken(token, Claims::getSubject);
     }
+   
+    /*public String getRolesFromToken(String token) {
+        Object rolesClaim = getClaimFromToken(token, claims -> claims.get("roles", Object.class));
 
-    public String getRolesFromToken(String token) {
-        List<String> roles = getClaimFromToken(token, claims -> claims.get("roles", List.class));
-        return String.join(",", roles); // Convert the list of roles to a comma-separated string
+        if (rolesClaim instanceof List<?>) {
+            List<?> rolesList = (List<?>) rolesClaim;
+            return rolesList.stream()
+                    .map(String::valueOf)
+                    .collect(Collectors.joining(","));
+        } else if (rolesClaim != null) {
+            return rolesClaim.toString();
+        } else {
+            return "";
+        }
     }
 
+    public String getRolesFromToken(String token) {
+        Object rolesClaim = getClaimFromToken(token, claims -> claims.get("roles", Object.class));
+
+        if (rolesClaim != null) {
+            return String.valueOf(rolesClaim);
+        } else {
+            return "";
+        }
+    }
+
+    public String getRolesFromToken(String token) {
+        List<?> rolesClaim = getClaimFromToken(token, claims -> claims.get("roles", List.class));
+
+        if (rolesClaim != null) {
+            return rolesClaim.stream()
+                    .map(String::valueOf)
+                    .collect(Collectors.joining(","));
+        } else {
+            return "";
+        }
+    }*/
+
+    public String getRolesFromToken(String token) {
+        List<?> rolesClaim = getClaimFromToken(token, claims -> claims.get("roles", List.class));
+
+        if (rolesClaim != null) {
+            List<String> roles = rolesClaim.stream()
+                    .map(obj -> {
+                        if (obj instanceof GrantedAuthority) {
+                            return ((GrantedAuthority) obj).getAuthority();
+                        } else if (obj instanceof Map) {
+                            return ((Map<?, ?>) obj).get("authority").toString();
+                        } else {
+                            return obj.toString();
+                        }
+                    })
+                    .collect(Collectors.toList());
+
+            System.out.print("Roles from Token: " + roles);
+            return String.join(",", roles);
+        } else {
+            return "";
+        }
+    }
+
+
+    
     //retrieve expiration date from jwt token
     public Date getExpirationDateFromToken(String token) {
         return getClaimFromToken(token, Claims::getExpiration);
@@ -54,12 +116,56 @@ public class JwtHelper {
     }
 
     //generate token for user
-    public String generateToken(UserDetails userDetails) {
+   /* public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("username", userDetails.getUsername());
 
-        claims.put("roles", userDetails.getAuthorities()); 
+        Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
+        List<String> roles = authorities.stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
+
+        claims.put("roles", roles);       
         return doGenerateToken(claims, userDetails.getUsername());
+    }
+*/
+    /*public String generateToken(UserDetails userDetails) {
+     /*   Map<String, Object> claims = new HashMap<>();
+        claims.put("username", userDetails.getUsername());
+
+        Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
+        List<String> roles = authorities.stream()
+        		   .map(GrantedAuthority::getAuthority)
+        		   .collect(Collectors.toList());
+        
+        claims.put("roles", roles);       
+        return doGenerateToken(claims, userDetails.getUsername());
+    	
+    	   Map<String, Object> claims = new HashMap<>();
+           claims.put("username", userDetails.getUsername());
+
+           Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
+           List<String> roles = authorities.stream()
+                   .map(GrantedAuthority::getAuthority)
+                   .collect(Collectors.toList());
+
+           claims.put("roles", String.join(",", roles));
+           return doGenerateToken(claims, userDetails.getUsername());
+    }*/
+
+    public String generateToken(UserDetails userDetails) {
+      /*  Map<String, Object> claims = new HashMap<>();
+        claims.put("username", userDetails.getUsername());
+
+        claims.put("roles", userDetails.getAuthorities()); 
+        return doGenerateToken(claims, userDetails.getUsername());*/
+    	        Map<String, Object> claims = new HashMap<>();
+    	        claims.put("username", userDetails.getUsername());
+
+    	        claims.put("roles", userDetails.getAuthorities()); 
+    	        return doGenerateToken(claims, userDetails.getUsername());
+    	    
+
     }
 
     //while creating the token -
@@ -75,9 +181,21 @@ public class JwtHelper {
     }
 
     //validate token
+ // Modify the validateToken method
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = getUsernameFromToken(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        final String roles = getRolesFromToken(token);
+
+        System.out.println("Roles from Token: " + roles);
+        //System.out.println("Roles from UserDetails: " + userDetails.getAuthorities());
+
+        
+        List<String> tokenRoles = Arrays.asList(roles.split(","));
+        System.out.println("tokenRoles from : " + tokenRoles);
+
+        return username.equals(userDetails.getUsername()) && userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .allMatch(tokenRoles::contains);
     }
 
 

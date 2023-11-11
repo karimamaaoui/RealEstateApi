@@ -35,7 +35,5 @@ public class Role {
 	@Enumerated(EnumType.STRING)
     private ERole name = ERole.CLIENT;
 	
-	/*@OneToMany(mappedBy = "role_id", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<User> users = new ArrayList<>();
-	 */
+	 
 }

@@ -44,10 +44,9 @@ public class SecurityConfiguration {
 		http.csrf(csrf -> csrf.disable())
         .cors(cors->cors.disable())
         .authorizeHttpRequests(
-        		auth->auth.requestMatchers("/home/**").authenticated()
+        		auth->auth.requestMatchers("/home/**").hasRole("ADMIN")
         		.requestMatchers("/auth/login").permitAll()
         		.requestMatchers("/auth/register").permitAll()
-        		.requestMatchers("/role/**").authenticated()
         		.anyRequest().authenticated())
         		.exceptionHandling(ex->ex.authenticationEntryPoint(jwtAuthentication))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)

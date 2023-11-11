@@ -43,6 +43,7 @@ public class RoleController {
      */
 
     @GetMapping("/getall")
+   
     public List<Role> getRoles() {
         return roleService.getRoles();
     }
