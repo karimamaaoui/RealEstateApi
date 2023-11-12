@@ -36,8 +36,6 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public void addUser(User user) {
-       // Role defaultRole = roleRepository.findById(Long.valueOf(1)).orElse(null);
-       // user.setRoles(defaultRole);
         userRepository.save(user);
     }
 
@@ -80,57 +78,11 @@ public class UserServiceImpl implements UserService {
 	        return user;
 	}
 
-	/*@Override
-	public User createUser(User user) {
-	   /*Role userRole = roleRepository.findByName(ERole.CLIENT)
-	            .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-	    
-	    user.setRole_id(userRole);
-	    
-		
-		  Set<Role> roles = new HashSet<>();
-		    Role userRole = roleRepository.findByName(ERole.CLIENT)
-		            .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-		        roles.add(userRole);
-		user.setRoles(roles);
-	    user.setPassword(passwordEncoder.encode(user.getPassword()));
-	    return userRepository.save(user);
-	}
-
-	@Override
-	public User createUser(User user) {
-	    Role userRole = roleRepository.findByName(ERole.CLIENT)
-	            .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-	    user.setRole(userRole); 
-	    user.setPassword(passwordEncoder.encode(user.getPassword()));
-	    return userRepository.save(user);
-	}
 	
 	@Override
 	public User createUser(User user) {
 	    try {
-	        Role userRole = roleRepository.findByName(ERole.CLIENT)
-	                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-	        
-	        user.setRoles(userRole);
-	        user.setPassword(passwordEncoder.encode(user.getPassword()));
-	        return userRepository.save(user);
-	    } catch (RuntimeException e) {
-	        e.printStackTrace(); 
-	        throw new RuntimeException("Error creating user", e); 
-	    }
-	}
-*/
-	@Override
-	public User createUser(User user) {
-	    try {
-	       /* Role userRole = roleRepository.findByName(ERole.CLIENT)
-	                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-	        
-	        user.setRole_id(userRole);
-	        user.setPassword(passwordEncoder.encode(user.getPassword()));
-	        return userRepository.save(user);*/
-	    	
+	     	
 	    	
 	  	  Set<Role> roles = new HashSet<>();
 		    Role userRole = roleRepository.findByName(ERole.CLIENT)
@@ -160,7 +112,6 @@ public class UserServiceImpl implements UserService {
 	    }
 
 	    private void sendActivationEmail(User user) {
-	        // Create the activation link using the user's email or any other unique identifier
 	        String activationLink = "http://localhost:8080/auth/activate?email=" + user.getEmail();
 
 	        // Build the email content
@@ -170,6 +121,7 @@ public class UserServiceImpl implements UserService {
 	        emailSender.send(user.getEmail(), emailContent);
 	    }
 	    
+	    //email html body to send 
 	    private String buildActivationEmail(String name, String link) {
 	        return "<div style=\"font-family:Helvetica,Arial,sans-serif;font-size:16px;margin:0;color:#0b0c0c\">\n" +
 	                "\n" +
