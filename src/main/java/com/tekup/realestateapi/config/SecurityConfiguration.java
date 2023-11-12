@@ -50,6 +50,7 @@ public class SecurityConfiguration {
         		.requestMatchers("/category/list").hasAnyRole("ADMIN","CLIENT")
         		.requestMatchers("/category/get").hasAnyRole("ADMIN","CLIENT")
         		.requestMatchers("/category/**").hasRole("ADMIN") 
+        	    .requestMatchers("/category/addWithImg").permitAll()
 
         		.anyRequest().authenticated())
         		.exceptionHandling(ex->ex.authenticationEntryPoint(jwtAuthentication))
