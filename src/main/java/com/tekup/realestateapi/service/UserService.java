@@ -12,4 +12,5 @@ public interface UserService {
     void deleteUser(Integer id);
     
     User createUser(User user);
+    public void activateUser(String email);
 }

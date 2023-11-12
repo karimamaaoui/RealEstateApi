@@ -46,6 +46,7 @@ public class SecurityConfiguration {
         .authorizeHttpRequests(
         		auth->auth.requestMatchers("/home/**").hasRole("ADMIN")
         		.requestMatchers("/auth/login").permitAll()
+        		.requestMatchers("auth/**").permitAll()
         		.requestMatchers("/auth/register").permitAll()
         		.requestMatchers("/category/list").hasAnyRole("ADMIN","CLIENT")
         		.requestMatchers("/category/get").hasAnyRole("ADMIN","CLIENT")

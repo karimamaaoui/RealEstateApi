@@ -33,6 +33,7 @@ public class User implements UserDetails {
     private String lastname;
     private String email;
     private String password;
+    private Boolean enabled;
     
     /*@ManyToOne()
     @JoinColumn(name = "role_id")
@@ -76,7 +77,7 @@ public class User implements UserDetails {
 	@Override
 	public boolean isEnabled() {
 		// TODO Auto-generated method stub
-		return true;
+		return enabled;
 	}
 	
 	@Override
