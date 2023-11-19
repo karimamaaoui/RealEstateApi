@@ -44,14 +44,13 @@ public class SecurityConfiguration {
 		http.csrf(csrf -> csrf.disable())
         .cors(cors->cors.disable())
         .authorizeHttpRequests(
-        		auth->auth.requestMatchers("/home/**").hasRole("ADMIN")
-        		.requestMatchers("/auth/login").permitAll()
+        		auth->auth
         		.requestMatchers("auth/**").permitAll()
-        		.requestMatchers("/auth/register").permitAll()
+        		.requestMatchers("/home/**").hasRole("ADMIN")
         		.requestMatchers("/category/list").hasAnyRole("ADMIN","CLIENT")
         		.requestMatchers("/category/get").hasAnyRole("ADMIN","CLIENT")
         		.requestMatchers("/category/**").hasRole("ADMIN") 
-        	    .requestMatchers("/category/addWithImg").permitAll()
+        		.requestMatchers("/users/**").hasRole("ADMIN") 
 
         		.anyRequest().authenticated())
         		.exceptionHandling(ex->ex.authenticationEntryPoint(jwtAuthentication))

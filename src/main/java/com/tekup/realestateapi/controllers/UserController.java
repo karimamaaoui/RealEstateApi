@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,7 +19,7 @@ import com.tekup.realestateapi.service.UserService;
 
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
 	
 	@Autowired
@@ -29,11 +30,10 @@ public class UserController {
      */
 
     @PostMapping("/add")
-    public String addUser(@RequestBody User user) {
+    public ResponseEntity<?> addUser(@RequestBody User user) {
     	
-        userService.addUser(user);
+        return userService.addUser(user);
 
-        return "success add user";
     }
     
     /**
@@ -50,15 +50,27 @@ public class UserController {
      */
 
     @GetMapping("/get")
-    public User getUser(@RequestParam Integer id) {
+    public ResponseEntity<?> getUser(@RequestParam Integer id) {
         return userService.getUser(id);
     }
+    
+    /**
+     * delete user by id
+     */
     @DeleteMapping("delete/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Integer id){
-        userService.deleteUser(id);
+    public ResponseEntity<?> deleteUser(@PathVariable Integer id){
+        
+    	return userService.deleteUser(id);
 
-        return ResponseEntity.noContent().build();
     }
 
+    /**
+     * update user 
+     */
+    @PutMapping("update/{id}")
+    public ResponseEntity<?> updateUser(@PathVariable Integer id ,@RequestBody User user){
+        
+    	return userService.updateUser(id,user);
 
+    }
 }

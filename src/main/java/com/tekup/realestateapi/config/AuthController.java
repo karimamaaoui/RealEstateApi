@@ -96,22 +96,23 @@ public class AuthController {
 
 	    }
 
-	    @ExceptionHandler(BadCredentialsException.class)
-	    public String exceptionHandler() {
-	        return "Credentials Invalid !!";
+	  @ExceptionHandler(BadCredentialsException.class)
+	    public ResponseEntity<String> exceptionHandler() {
+	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Username or Password");
 	    }
-	    
-	    
+	    //register new user
 	    @PostMapping("register")
-	    public User createUser(@RequestBody User user)
+	    public ResponseEntity<?> createUser(@RequestBody User user)
 	    {
 	    	
 	    	return userService.createUser(user);
 	    }
-	   
+	   //activate account with verification email 
 	    @GetMapping("/activate")
 	    public ResponseEntity<String> activateUser(@RequestParam String email) {
 	        userService.activateUser(email);
 	        return new ResponseEntity<>("User activated successfully", HttpStatus.OK);
 	    }
+	    
+	    
 }

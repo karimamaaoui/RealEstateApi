@@ -35,5 +35,7 @@ public class Role {
 	@Enumerated(EnumType.STRING)
     private ERole name = ERole.CLIENT;
 	
-	 
+	public Role(ERole name) {
+        this.name = name;
+    }
 }
