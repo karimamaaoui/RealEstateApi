@@ -29,18 +29,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		//configuration
 		
-      /*  http.csrf(csrf -> csrf.disable())
-                .authorizeRequests().
-                requestMatchers("/test")
-                .authenticated()
-                .requestMatchers("/auth/login")
-                .permitAll()
-                .anyRequest()
-                .authenticated()
-                .and().exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthentication))
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-       */
+      
 		http.csrf(csrf -> csrf.disable())
         .cors(cors->cors.disable())
         .authorizeHttpRequests(
@@ -51,6 +40,7 @@ public class SecurityConfiguration {
         		.requestMatchers("/category/get").hasAnyRole("ADMIN","CLIENT")
         		.requestMatchers("/category/**").hasRole("ADMIN") 
         		.requestMatchers("/users/**").hasRole("ADMIN") 
+        		.requestMatchers("/country/**").permitAll()
 
         		.anyRequest().authenticated())
         		.exceptionHandling(ex->ex.authenticationEntryPoint(jwtAuthentication))

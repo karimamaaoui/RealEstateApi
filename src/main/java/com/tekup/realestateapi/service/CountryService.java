@@ -10,7 +10,7 @@ import com.tekup.realestateapi.models.Country;
 public interface CountryService {
 
 	ResponseEntity<?> addCountry(Country country);
-    List<Country> getCountries();
+	ResponseEntity<List<Country>> getCountries();
     ResponseEntity<?>  getCountry(Long id);
     ResponseEntity<?> deleteCountry(Long id);   
     ResponseEntity<?> updateCountry(Long id, Country country);
