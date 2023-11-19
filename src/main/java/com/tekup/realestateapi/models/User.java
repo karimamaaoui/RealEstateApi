@@ -34,7 +34,8 @@ public class User implements UserDetails {
     private String email;
     private String password;
     private Boolean enabled;
-    
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<RealEstate> realEstates;
     /*@ManyToOne()
     @JoinColumn(name = "role_id")
     private Role role_id;
