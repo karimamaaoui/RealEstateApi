@@ -52,10 +52,10 @@ public class RealEstate {
 	@JoinColumn(name = "user_id") 
 	private User user;
 	private float price;
-	 @ManyToOne
+	/* @ManyToOne
 	 @JoinColumn(name = "town_id")
 	 private Town town;
-
+*/
 	 @OneToOne
 	 @JoinColumn(name = "category_id")
 	 private Category category;

@@ -1,17 +1,16 @@
 package com.tekup.realestateapi.models;
 
-import java.util.ArrayList;
-import java.util.List;
 
-import jakarta.persistence.CascadeType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,17 +31,19 @@ public class Town {
     @Column(name = "id_town")
 	private Long  idTown;
 	private String name;
-	 @ManyToOne
-	 @JoinColumn(name = "country_id")
-	 private Country country;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "country_id")
+	//@JsonIgnore 
+	private Country country;
 
-	 
-	 @OneToMany(mappedBy = "town", cascade = CascadeType.ALL)
+  
+
+	/* @OneToMany(mappedBy = "town", cascade = CascadeType.ALL)
 	 private List<RealEstate> realEstates;
 
+	 */
 	 
-	 
-	 public void addRealEstate(RealEstate realEstate) {
+	/* public void addRealEstate(RealEstate realEstate) {
 	        if (realEstates == null) {
 	            realEstates = new ArrayList<>();
 	        }
@@ -55,5 +56,5 @@ public class Town {
 	            realEstates.remove(realEstate);
 	          //  realEstate.setTown(null);
 	        }
-	    }
+	    }*/
 }

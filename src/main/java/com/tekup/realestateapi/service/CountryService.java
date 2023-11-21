@@ -11,8 +11,12 @@ public interface CountryService {
 
 	ResponseEntity<?> addCountry(Country country);
 	ResponseEntity<List<Country>> getCountries();
-    ResponseEntity<?>  getCountry(Long id);
+	//	ResponseEntity<List<CountryDTO>> getCountries();
+
+    ResponseEntity<?> getCountry(Long id);
     ResponseEntity<?> deleteCountry(Long id);   
     ResponseEntity<?> updateCountry(Long id, Country country);
+    ResponseEntity<List<Country>> getCountriesWithTowns();
+
 
 }

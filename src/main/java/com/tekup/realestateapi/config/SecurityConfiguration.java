@@ -35,20 +35,22 @@ public class SecurityConfiguration {
         .authorizeHttpRequests(
         		auth->auth
         		.requestMatchers("auth/**").permitAll()
+        		.requestMatchers("/country/**").permitAll()
+                .requestMatchers("/town/**").hasAnyRole("ADMIN", "CLIENT")
         		.requestMatchers("/home/**").hasRole("ADMIN")
         		.requestMatchers("/category/list").hasAnyRole("ADMIN","CLIENT")
         		.requestMatchers("/category/get").hasAnyRole("ADMIN","CLIENT")
         		.requestMatchers("/category/**").hasRole("ADMIN") 
         		.requestMatchers("/users/**").hasRole("ADMIN") 
-        		.requestMatchers("/country/**").permitAll()
 
+        		
         		.anyRequest().authenticated())
         		.exceptionHandling(ex->ex.authenticationEntryPoint(jwtAuthentication))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 		
                 		);
 		http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-        
+
         return http.build();
     }
 	@Bean

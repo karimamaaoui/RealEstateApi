@@ -1,9 +1,11 @@
 package com.tekup.realestateapi.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -19,7 +21,7 @@ import lombok.ToString;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
+@ToString(exclude = "towns")
 @Entity
 @Table(name="country")
 public class Country {
@@ -28,6 +30,8 @@ public class Country {
     @Column(name = "id_country")
 	private Long  idCountry;
 	private String name;
-	@OneToMany(mappedBy = "country")
+	
+	@OneToMany(mappedBy = "country", fetch = FetchType.LAZY)
 	private List<Town> towns;
+	
 }
