@@ -5,18 +5,18 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 
 import com.tekup.realestateapi.models.Country;
+import com.tekup.realestateapi.models.Town;
 
 
 public interface CountryService {
 
-	ResponseEntity<?> addCountry(Country country);
-	ResponseEntity<List<Country>> getCountries();
-	//	ResponseEntity<List<CountryDTO>> getCountries();
 
-    ResponseEntity<?> getCountry(Long id);
-    ResponseEntity<?> deleteCountry(Long id);   
-    ResponseEntity<?> updateCountry(Long id, Country country);
-    ResponseEntity<List<Country>> getCountriesWithTowns();
+
+	  	ResponseEntity<List<Country>> getAllCountries();
+	    ResponseEntity<Country> getCountryById(Long id);
+	    ResponseEntity<Country> saveCountry(Country country);
+	    ResponseEntity<?> deleteCountry(Long id);
+	    ResponseEntity<Country> updateCountry(Long id, Country updatedCountry);
 
 
 }

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tekup.realestateapi.models.Country;
+import com.tekup.realestateapi.models.Town;
 import com.tekup.realestateapi.service.CountryService;
 
 @RestController
@@ -27,69 +28,31 @@ public class CountryController {
 	@Autowired
     private CountryService countryService;
 	
-	 /**
-     * add Country
-     */
+	  @GetMapping("/list")
+	    public ResponseEntity<List<Country>> getAllCountries() {
+	        return countryService.getAllCountries();
+	    }
 
-    @PostMapping("/add")
-    public ResponseEntity<?> addCountry(@RequestBody Country country) {
-    	
-        return countryService.addCountry(country);
+	    @GetMapping("/{id}")
+	    public ResponseEntity<Country> getCountryById(@PathVariable Long id) {
+	        return countryService.getCountryById(id);
+	    }
 
-    }
-    
-    /**
-     * get Countries as list
-     */
+	    @PostMapping("/add")
+	    public ResponseEntity<Country> saveCountry(@RequestBody Country country) {
+	        return countryService.saveCountry(country);
+	    }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<Country>> getCountries() {
-        ResponseEntity<List<Country>> responseEntity = countryService.getCountries();
-
-        if (responseEntity != null && responseEntity.getBody() != null) {
-            List<Country> countries = responseEntity.getBody();
-
-            if (countries.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            } else {
-                return new ResponseEntity<>(countries, HttpStatus.OK);
-            }
-        } else {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-    /**
-     * get Country by id
-     */
-    @GetMapping("/get")
-    @PreAuthorize("hasAnyRole('ADMIN', 'CLIENT')")
-    public ResponseEntity<?> getCountry(@RequestParam Long id) {
-        return countryService.getCountry(id);
-    }
-   
-    
-    /**
-     * delete Country by id
-     */
-    @DeleteMapping("delete/{id}")
-    public ResponseEntity<?> deleteCountry(@PathVariable Long id){
-        
-    	return countryService.deleteCountry(id);
-
-    }
-
-    /**
-     * update Country 
-     */
-    @PutMapping("update/{id}")
-    public ResponseEntity<?> updateCountry(@PathVariable Long id ,@RequestBody Country country){
-        
-    	return countryService.updateCountry(id,country);
-
-    }
-    @GetMapping("/alltowns")
-    public ResponseEntity<List<Country>> getCountriesWithTowns() {
-    	System.out.println("hell ofrm alltowns");
-        return countryService.getCountriesWithTowns();
-    }
+	    @DeleteMapping("/delete/{id}")
+	    public ResponseEntity<?> deleteCountry(@PathVariable Long id) {
+	        return countryService.deleteCountry(id);
+	    }
+	    
+	    @PutMapping("/update/{id}")
+	    public ResponseEntity<Country> updateCountry(
+	            @PathVariable Long id,
+	            @RequestBody Country updatedCountry
+	    ) {
+	        return countryService.updateCountry(id, updatedCountry);
+	    }
 }

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tekup.realestateapi.models.Employee;
 import com.tekup.realestateapi.models.Town;
 import com.tekup.realestateapi.models.TownWithCountryDTO;
 import com.tekup.realestateapi.service.TownService;
@@ -30,81 +31,47 @@ public class TownController {
     private TownService townService;
 	
 	
-	 /**
-     * add town
-     */
-/*
-	@PostMapping("/add")
-	public ResponseEntity<?> addTown(@RequestBody Town town) {
-	    try {
-	        return townService.addTown(town);
-	    } catch (Exception e) {
-	        // Handle any exceptions, e.g., constraint violations
-	        return new ResponseEntity<>("Error creating Town: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-	    }
-	}*/
-	 @PostMapping("/add")
-	    public ResponseEntity<?> addTown(@RequestBody Town town) {
-	        try {
-	        	System.out.println("town body "+town);
-	            return townService.addTown(town);
-	        } catch (Exception e) {
-	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error creating town: " + e.getMessage());
-	        }
-	    }
-
 	
-
-	@GetMapping("/list")
-    public ResponseEntity<?> getAllTownsWithCountries() {
-        try {
-            List<TownWithCountryDTO> towns = townService.getTownsWithCountries();
-
-            if (towns.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.NO_CONTENT).body("No towns found");
-            } else {
-                return ResponseEntity.ok(towns);
-            }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error retrieving towns: " + e.getMessage());
-        }
-    } 
-    /**
-     * get Town by id
-     */
-	@GetMapping("/get/{id}")
-	public ResponseEntity<?> getTownById(@PathVariable Long id) {
-	    try {
-	        Optional<TownWithCountryDTO> optionalTown = townService.getTownWithCountryById(id);
-	        
-	        if (optionalTown.isPresent()) {
-	            TownWithCountryDTO townDTO = optionalTown.get();
-	            return ResponseEntity.ok(townDTO);
-	        } else {
-	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Town not found with ID: " + id);
-	        }
-	    } catch (Exception e) {
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error retrieving town: " + e.getMessage());
+	 @GetMapping("/list")
+	    public ResponseEntity<List<Town>> getAllTowns() {
+	        return townService.getAllTowns();
 	    }
-	}
 
-    /**
-     * delete Town by id
-     */
-    @DeleteMapping("delete/{id}")
-    public ResponseEntity<?> deleteTown(@PathVariable Long id){
-        
-    	return townService.deleteTown(id);
+	    @GetMapping("/{id}")
+	    public ResponseEntity<Town> getTownById(@PathVariable Long id) {
+	        return townService.getTownById(id);
+	    }
+	    @PutMapping("/update/{id}")
+	    public ResponseEntity<Town> updateTown(
+	            @PathVariable Long id,
+	            @RequestBody Town updatedTown
+	    ) {
+	        return townService.updateTown(id, updatedTown);
+	    }
+	    @PostMapping("/add")
+	    public ResponseEntity<Town> saveTown(@RequestBody Town town) {
+	        return townService.saveTown(town);
+	    }
 
-    }
-
-    /**
-     * update Town 
-     */
-    @PutMapping("update/{id}")
-    public ResponseEntity<?> updateTown(@PathVariable Long id ,@RequestBody Town town){
-        
-    	return townService.updateTown(id,town);
-
-    }
+	    @DeleteMapping("/{id}")
+	    public ResponseEntity<Void> deleteTown(@PathVariable Long id) {
+	        return townService.deleteTown(id);
+	    }
+	    @PutMapping("/update/{idtown}/country/{idcountry}")
+	    public ResponseEntity<Town> addCountryToTown(
+	    	@PathVariable Long idtown,
+	    	@PathVariable Long idcountry
+	    )
+	    {
+	    return townService.addCountryToTown(idtown,idcountry);	
+	    }
+	    
+	    @PutMapping("/updateCountry/{idtown}/country/{idcountry}")
+	    public ResponseEntity<Town> updateCountryInTown(
+	            @PathVariable Long idtown,
+	            @PathVariable Long idcountry
+	    ) {
+	        return townService.updateCountryInTown(idtown, idcountry);
+	    }
+	    
 }

@@ -1,4 +1,5 @@
 package com.tekup.realestateapi.models;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,28 +16,25 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
-@Getter
-@Setter
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
-@Entity
-@Table(name="town")
-public class Town {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_town")
-	private Long  idTown;
-	private String name;
-	
-	 @ManyToMany
-	    @JoinTable(name="town_country",
-	    joinColumns = @JoinColumn(name ="id_town"),
-	    inverseJoinColumns = @JoinColumn(name="id_country")
+@Getter
+@Setter
+@Table(name="employee")
+public class Employee {
+
+	   	@Id
+	    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	    private Long idemp;
+	    private String name;
+
+	    @ManyToMany
+	    @JoinTable(name="employee_project",
+	    joinColumns = @JoinColumn(name ="idemp"),
+	    inverseJoinColumns = @JoinColumn(name="id_proj")
 	    )
-	private Set<Country> countriesTown=new HashSet<>();
+	    private Set<Project> projectsEmployee=new HashSet<>();
 	
-	   
 }
