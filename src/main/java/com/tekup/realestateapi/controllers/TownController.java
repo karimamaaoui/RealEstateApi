@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.tekup.realestateapi.models.Employee;
 import com.tekup.realestateapi.models.Town;
 import com.tekup.realestateapi.models.TownWithCountryDTO;
 import com.tekup.realestateapi.service.TownService;

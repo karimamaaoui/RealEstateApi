@@ -17,6 +17,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -34,12 +36,11 @@ public class User implements UserDetails {
     private String email;
     private String password;
     private Boolean enabled;
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<RealEstate> realEstates;
-    /*@ManyToOne()
-    @JoinColumn(name = "role_id")
-    private Role role_id;
-  */
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "user")
+	    private Set<RealEstate> realEstates;
+ 
     
     @ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(	name = "user_roles", 
@@ -56,7 +57,9 @@ public class User implements UserDetails {
 	public String getUsername() {
 		return this.email;
 	}
-
+	public User(Integer id) {
+        this.idUser = id;
+    }
 	@Override
 	public boolean isAccountNonExpired() {
 		// TODO Auto-generated method stub

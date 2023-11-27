@@ -39,11 +39,12 @@ public class CategoryController {
      * add new category as 
      */
 	 @PostMapping("/add")
-		public String uploadImage(@RequestParam("file")MultipartFile file,
+		public Category uploadImage(@RequestParam("file")MultipartFile file,
 				@RequestParam("title") String title
 				
 				) throws IOException {
-			System.out.println(file.getOriginalFilename());
+		 
+			System.out.println("file name"+file.getOriginalFilename());
 			
             String pathDirectory = "C:\\Users\\user\\Documents\\workspace-spring-tool-suite-4-4.20.0.RELEASE\\realestateapi\\src\\main\\resources\\static\\images\\category";
 			

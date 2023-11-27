@@ -79,13 +79,12 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
-	public String createCategoryImg(MultipartFile file, String name) {
+	public Category createCategoryImg(MultipartFile file, String name) {
 			Category category = new Category();
 			category.setTitle(name);
 			category.setImage(file.getOriginalFilename());
 			System.out.println("image "+category);
-			categoryRepository.save(category);
-			return "Image saved in DB";
+			return categoryRepository.save(category);
 		
 	}
 	

@@ -62,7 +62,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString()
+@ToString
 @Entity
 @Table(name="country")
 public class Country {

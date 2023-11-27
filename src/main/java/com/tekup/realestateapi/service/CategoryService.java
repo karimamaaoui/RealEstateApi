@@ -15,5 +15,6 @@ public interface CategoryService {
     
     void createCategory(Category cat);
     Category createCategoryWithImg(Category cat);
-    String createCategoryImg(MultipartFile file, String name);
+    Category createCategoryImg(MultipartFile file, String name);
+    
 }

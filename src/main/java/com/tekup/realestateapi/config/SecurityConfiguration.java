@@ -37,15 +37,17 @@ public class SecurityConfiguration {
         		.requestMatchers("auth/**").permitAll()
         		.requestMatchers("/country/**").permitAll()
                 .requestMatchers("/town/**").hasAnyRole("ADMIN", "CLIENT")
-                .requestMatchers("/employee/**").hasAnyRole("ADMIN", "CLIENT")
-                .requestMatchers("/project/**").hasAnyRole("ADMIN", "CLIENT")
+                .requestMatchers("/realestate/**").hasAnyRole("ADMIN", "CLIENT")
 
                 .requestMatchers("/home/**").hasRole("ADMIN")
         		.requestMatchers("/category/list").hasAnyRole("ADMIN","CLIENT")
         		.requestMatchers("/category/get").hasAnyRole("ADMIN","CLIENT")
         		.requestMatchers("/category/**").hasRole("ADMIN") 
         		.requestMatchers("/users/**").hasRole("ADMIN") 
-
+        		
+        		
+        		
+        		
         		
         		.anyRequest().authenticated())
         		.exceptionHandling(ex->ex.authenticationEntryPoint(jwtAuthentication))

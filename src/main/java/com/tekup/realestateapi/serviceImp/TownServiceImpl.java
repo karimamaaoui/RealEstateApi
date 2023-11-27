@@ -12,8 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.tekup.realestateapi.models.Country;
-import com.tekup.realestateapi.models.Employee;
-import com.tekup.realestateapi.models.Project;
 import com.tekup.realestateapi.models.Town;
 import com.tekup.realestateapi.models.TownWithCountryDTO;
 import com.tekup.realestateapi.repository.CountryRepository;

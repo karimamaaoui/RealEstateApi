@@ -1,5 +1,6 @@
 package com.tekup.realestateapi.models;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,15 +21,18 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @Entity
-@Table(name="images")
-public class Images {
+@Table(name = "real_estate_image")
+public class RealEstateImage {
+  
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_image")
 	private Long  idImage;
-	private String name;
-	@ManyToOne
+	private String imageName;
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "real_estate_id")
 	private RealEstate realEstate;
-
+	 
+	 
+		
 }
