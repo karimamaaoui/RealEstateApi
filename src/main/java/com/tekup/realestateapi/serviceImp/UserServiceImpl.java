@@ -332,5 +332,21 @@ public class UserServiceImpl implements UserService {
 	        }
 	    }
 
+		@Override
+		public ResponseEntity<?> desactiveUser(Integer id) {
+		
+			User user = userRepository.findById(id).orElse(null);
+
+	        if (user != null) {
+	            user.setEnabled(false);
+
+	            userRepository.save(user);
+
+	            return ResponseEntity.ok("Account Disabled Successfully");
+	        } else {
+	            return ResponseEntity.notFound().build();
+	        }
+		}
+
 
 }

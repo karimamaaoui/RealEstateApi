@@ -12,7 +12,7 @@ public interface RealEstateService {
     List<RealEstate> getRealEstate();
     ResponseEntity<?> getRealEstateById(Long id);
     ResponseEntity<?> deleteRealEstate(Long id);   
-    ResponseEntity<?> updateRealEstate(Long id, RealEstate real);
-	 ResponseEntity<?> addRealEstates(List<MultipartFile> files,RealEstate realEstate);
+    ResponseEntity<?> updateRealEstate(Long id,List<MultipartFile> files,RealEstate realEstate);
+	ResponseEntity<?> addRealEstates(List<MultipartFile> files,RealEstate realEstate);
 
 }

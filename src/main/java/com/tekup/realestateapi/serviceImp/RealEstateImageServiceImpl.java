@@ -1,9 +1,13 @@
 package com.tekup.realestateapi.serviceImp;
 
 
+import com.tekup.realestateapi.models.RealEstate;
 import com.tekup.realestateapi.models.RealEstateImage;
 import com.tekup.realestateapi.repository.RealEstateImageRepository;
 import com.tekup.realestateapi.service.RealEstateImageService;
+
+import jakarta.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -31,5 +35,10 @@ public class RealEstateImageServiceImpl implements RealEstateImageService {
     public ResponseEntity<?> deleteRealEstateImage(Long id) {
         realEstateImageRepository.deleteById(id);
         return ResponseEntity.noContent().build();
+    }
+    
+    @Transactional
+    public void deleteImagesByRealEstate(RealEstate realEstate) {
+    	realEstateImageRepository.deleteByRealEstate(realEstate);
     }
 }

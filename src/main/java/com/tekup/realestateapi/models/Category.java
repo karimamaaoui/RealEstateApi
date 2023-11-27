@@ -36,7 +36,7 @@ public class Category {
 	private String image;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "category")
+	@OneToMany(mappedBy = "category",cascade = CascadeType.REMOVE)
 	    private Set<RealEstate> realEstates;
     
     public Category(Integer id) {

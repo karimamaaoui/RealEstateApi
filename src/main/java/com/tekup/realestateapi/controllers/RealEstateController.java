@@ -12,6 +12,8 @@ import com.tekup.realestateapi.models.RealEstate;
 import com.tekup.realestateapi.service.CategoryService;
 import com.tekup.realestateapi.service.RealEstateService;
 
+import jakarta.transaction.Transactional;
+
 import java.util.List;
 
 @RestController
@@ -50,16 +52,22 @@ public class RealEstateController {
         return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
     }*/
   
-    @PostMapping("/addnewwithcategory")
-    public ResponseEntity<?> creatTeacherSubject(@RequestPart("files") List<MultipartFile> files,
+   
+    @PostMapping("/add")
+    public ResponseEntity<?> createRealEstate(@RequestPart("files") List<MultipartFile> files,
     		@RequestPart RealEstate estate) {
     	System.out.println("file "+files.toString());
         return realEstateService.addRealEstates(files,estate);
     }
 
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> updateRealEstate(@PathVariable Long id,@RequestPart(value = "files", required = false) List<MultipartFile> files,
+    		@RequestPart RealEstate estate) {
+    	//System.out.println("file "+files.toString());
+        return realEstateService.updateRealEstate(id,files,estate);
+    }
 
-
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteRealEstate(@PathVariable Long id) {
         realEstateService.deleteRealEstate(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +14,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,6 +30,8 @@ import com.tekup.realestateapi.repository.RealEstateRepository;
 import com.tekup.realestateapi.repository.TownRepository;
 import com.tekup.realestateapi.repository.UserRepository;
 import com.tekup.realestateapi.service.RealEstateService;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class RealEstateServiceImpl implements RealEstateService {
@@ -285,15 +289,102 @@ public class RealEstateServiceImpl implements RealEstateService {
 		realEstateRepository.deleteById(id);
 		return ResponseEntity.noContent().build();
 	}
-
+	
 	@Override
-	public ResponseEntity<?> updateRealEstate(Long id, RealEstate updatedRealEstate) {
-		if (realEstateRepository.existsById(id)) {
-			updatedRealEstate.setId(id);
-			realEstateRepository.save(updatedRealEstate);
-			return ResponseEntity.ok(updatedRealEstate);
-		} else {
-			return ResponseEntity.notFound().build();
-		}
+	public ResponseEntity<?> updateRealEstate(
+	        @PathVariable Long id,
+	        @RequestPart(value = "files", required = false) List<MultipartFile> files,
+	        @RequestPart RealEstate realEstate) {
+
+		RealEstate existingRealEstate = realEstateRepository.findById(id).orElse(null);
+
+	    if (existingRealEstate != null) {
+	        // Update the existing real estate properties if they are not null in the request
+	        if (realEstate.getDescription() != null) {
+	            existingRealEstate.setDescription(realEstate.getDescription());
+	        }
+
+	        if (realEstate.getNumFloor() > 0) {
+	            existingRealEstate.setNumFloor(realEstate.getNumFloor());
+	        }
+
+	        if (realEstate.getCreatedAt() != null) {
+	            existingRealEstate.setCreatedAt(realEstate.getCreatedAt());
+	        }
+
+	        if (realEstate.getStates() != null) {
+	            existingRealEstate.setStates(realEstate.getStates());
+	        }
+
+	        if (realEstate.getState() != null) {
+	            existingRealEstate.setState(realEstate.getState());
+	        }
+
+
+	        // Update the associated entities (User, Category, Town) if they are not null in the request
+	        if (realEstate.getUser() != null) {
+	            existingRealEstate.setUser(userRepository.findById(realEstate.getUser().getIdUser()).orElse(null));
+	        }
+
+	        if (realEstate.getCategory() != null) {
+	            existingRealEstate.setCategory(categoryRepository.findById(realEstate.getCategory().getIdCat()).orElse(null));
+	        }
+
+	        if (realEstate.getTown() != null) {
+	            existingRealEstate.setTown(townRepository.findById(realEstate.getTown().getIdTown()).orElse(null));
+	        }
+
+
+	        // Handle file updates
+	        if (files != null && !files.isEmpty()) {
+	            // Remove existing images
+	            estateImageRepository.deleteByRealEstate(existingRealEstate);
+	            String pathDirectory = "C:\\Users\\user\\Documents\\workspace-spring-tool-suite-4-4.20.0.RELEASE\\realestateapi\\src\\main\\resources\\static\\images\\realestate";
+
+	            // Save new images
+	            List<RealEstateImage> newImages = new ArrayList<>();
+	            for (MultipartFile file : files) {
+	                String imageName = file.getOriginalFilename();
+	                System.out.println("files "+file.getOriginalFilename());
+
+	                // Check if a file with the same name already exists
+	                RealEstateImage existingImage = estateImageRepository.findByImageNameAndRealEstate(imageName, existingRealEstate);
+	                if (existingImage != null) {
+	                    // File with the same name already exists, handle accordingly (skip, replace, or modify the name)
+	                    // For example, you can add a timestamp to the file name
+	                    imageName = System.currentTimeMillis() + "_" + imageName;
+	                }
+
+	                try {
+	                    // Save image file
+	                    Files.copy(
+	                            file.getInputStream(),
+	                            Paths.get(pathDirectory + File.separator + imageName),
+	                            StandardCopyOption.REPLACE_EXISTING
+	                    );
+	                } catch (IOException e) {
+	                    e.printStackTrace();
+	                    return new ResponseEntity<>("Failed to save images", HttpStatus.INTERNAL_SERVER_ERROR);
+	                }
+
+	                // Create and save new image entity
+	                RealEstateImage newImage = new RealEstateImage();
+	                newImage.setImageName(imageName);
+	                newImage.setRealEstate(existingRealEstate);
+	                estateImageRepository.save(newImage);
+	                newImages.add(newImage);
+	            }
+
+	            // Update the real estate with new images
+	            existingRealEstate.setImages(newImages);
+	        }
+
+	        // Save the updated real estate (including images if new files were provided)
+	        realEstateRepository.save(existingRealEstate);
+
+	        return new ResponseEntity<>("Real estate updated successfully", HttpStatus.OK);
+	    } else {
+	        return new ResponseEntity<>("Real estate not found with ID: " + id, HttpStatus.NOT_FOUND);
+	    }
 	}
 }

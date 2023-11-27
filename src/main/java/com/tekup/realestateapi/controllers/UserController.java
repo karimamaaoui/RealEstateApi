@@ -40,7 +40,7 @@ public class UserController {
      * get users as list
      */
 
-    @GetMapping
+    @GetMapping("/all")
     public List<User> getUsers() {
         return userService.getUsers();
     }
@@ -72,5 +72,14 @@ public class UserController {
         
     	return userService.updateUser(id,user);
 
+    }
+
+    /**
+     * disable user 
+     */
+    
+    @PostMapping("/disable/{id}")
+    public ResponseEntity<?> desactiverUtilisateur(@PathVariable Integer id) {
+        return userService.desactiveUser(id);
     }
 }

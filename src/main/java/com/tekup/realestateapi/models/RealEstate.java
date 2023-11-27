@@ -19,23 +19,19 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
-import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Entity
 @Table(name="real_estate")
 public class RealEstate {
@@ -53,19 +49,19 @@ public class RealEstate {
 	@Enumerated(EnumType.STRING)
 	private EState state;
 
-	@OneToMany(mappedBy = "realEstate")
+	@OneToMany(mappedBy = "realEstate",cascade = {CascadeType.REMOVE,CascadeType.MERGE})
 	 private List<RealEstateImage> images;
 	  
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name = "user_id") 
 	private User user;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
 	private float price;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name = "town_id")
 	private Town town;
 	

@@ -15,6 +15,7 @@ public interface UserService {
     ResponseEntity<?> deleteUser(Integer id);   
     ResponseEntity<?> createUser(User user);
     ResponseEntity<?> updateUser(Integer id, User user);
+    ResponseEntity<?> desactiveUser(Integer id);
 
     public void activateUser(String email);
 }

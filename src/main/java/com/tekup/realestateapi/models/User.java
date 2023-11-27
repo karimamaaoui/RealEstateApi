@@ -38,7 +38,7 @@ public class User implements UserDetails {
     private Boolean enabled;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "user",cascade = CascadeType.REMOVE)
 	    private Set<RealEstate> realEstates;
  
     

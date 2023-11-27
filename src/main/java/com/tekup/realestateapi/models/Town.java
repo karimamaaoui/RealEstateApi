@@ -44,7 +44,7 @@ public class Town {
 	private Set<Country> countriesTown=new HashSet<>();
 	
 		@JsonIgnore
-		@OneToMany(mappedBy = "town")
+		@OneToMany(mappedBy = "town",cascade = CascadeType.REMOVE)
 		    private Set<RealEstate> realEstates;
 	 
 		public Town(Long id) {

@@ -115,7 +115,7 @@ public class CategoryController {
             @RequestPart("title") String title,
             @RequestPart(value = "file", required = false) MultipartFile file) {
         try {
-            String pathDirectory = "C:\\Users\\user\\Documents\\workspace-spring-tool-suite-4-4.20.0.RELEASE\\realestateapi\\src\\main\\resources\\static\\image";
+            String pathDirectory = "C:\\Users\\user\\Documents\\workspace-spring-tool-suite-4-4.20.0.RELEASE\\realestateapi\\src\\main\\resources\\static\\images\\category";
 
             if (file != null && !file.isEmpty()) {
                 Files.copy(
