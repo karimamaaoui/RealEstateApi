@@ -40,7 +40,7 @@ public class RealEstate {
     @Column(name = "id_real")
     private Long id;
     private String description;
-    private int NumFloor;
+    private int numFloor;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at", updatable = false)
     private Date createdAt;
@@ -48,7 +48,7 @@ public class RealEstate {
     private EStates states;
 	@Enumerated(EnumType.STRING)
 	private EState state;
-
+	@JsonIgnore
 	@OneToMany(mappedBy = "realEstate",cascade = {CascadeType.REMOVE,CascadeType.MERGE})
 	 private List<RealEstateImage> images;
 	  
@@ -74,7 +74,7 @@ public class RealEstate {
 	    return "RealEstate{" +
 	            "id=" + id +
 	            ", description='" + description + '\'' +
-	            ", numFloor=" + this.NumFloor +
+	            ", numFloor=" + this.numFloor +
 	            ", createdAt=" + createdAt +
 	            ", states=" + states +
 	            ", state=" + state +

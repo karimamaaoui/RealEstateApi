@@ -1,6 +1,7 @@
 package com.tekup.realestateapi.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -8,6 +9,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tekup.realestateapi.models.Category;
+import com.tekup.realestateapi.models.EState;
+import com.tekup.realestateapi.models.EStates;
 import com.tekup.realestateapi.models.RealEstate;
 import com.tekup.realestateapi.service.CategoryService;
 import com.tekup.realestateapi.service.RealEstateService;
@@ -72,4 +75,50 @@ public class RealEstateController {
         realEstateService.deleteRealEstate(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    
+    
+  /*  @GetMapping("/getAllRealEstates")
+    public ResponseEntity<List<RealEstate>> getAllPost(
+    		@RequestParam(value="pageNumber",defaultValue = "0",required = false)Integer pageNumber,
+    		@RequestParam(value="pageSize",defaultValue = "5",required = false)Integer pageSize,
+    		@RequestParam(value="field",defaultValue = "",required = false)String field
+
+    		) {
+    	System.out.println("hello");
+        List<RealEstate> realEstates = realEstateService.getRealEstateList(pageNumber,pageSize,field);
+        
+        return new ResponseEntity<>(realEstates, HttpStatus.OK);
+    }
+    
+    @GetMapping("/getAllRealEstates")
+    public ResponseEntity<List<RealEstate>> getAllPost(
+            @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = "5", required = false) Integer pageSize,
+            @RequestParam(value = "field", defaultValue = "", required = false) String field,
+            @RequestParam(value = "townName", defaultValue = "", required = false) String townName
+            
+    ) {
+        List<RealEstate> realEstates = realEstateService.getRealEstateList(pageNumber, pageSize, field, townName);
+
+        return new ResponseEntity<>(realEstates, HttpStatus.OK);
+    }
+    */
+    @GetMapping("/getAllRealEstates")
+    public ResponseEntity<List<RealEstate>> getAllPost(
+            @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = "5", required = false) Integer pageSize,
+            @RequestParam(value = "field", defaultValue = "", required = false) String field,
+            @RequestParam(value = "townName", defaultValue = "", required = false) String townName,
+            @RequestParam(value = "states", defaultValue = "", required = false) EStates states,
+            @RequestParam(value = "state", defaultValue = "", required = false) EState state,
+            @RequestParam(value = "numFloor", defaultValue = "0", required = false) Integer numFloor
+            
+    ) {
+        List<RealEstate> realEstates = realEstateService.getRealEstateList(pageNumber, pageSize, field, townName,states,state,numFloor);
+
+        return new ResponseEntity<>(realEstates, HttpStatus.OK);
+    }
+    
+    
 }

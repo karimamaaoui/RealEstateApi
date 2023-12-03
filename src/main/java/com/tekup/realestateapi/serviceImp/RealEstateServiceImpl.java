@@ -11,15 +11,20 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.tekup.realestateapi.models.Category;
+import com.tekup.realestateapi.models.EState;
+import com.tekup.realestateapi.models.EStates;
 import com.tekup.realestateapi.models.RealEstate;
 import com.tekup.realestateapi.models.RealEstateImage;
 import com.tekup.realestateapi.models.Town;
@@ -32,6 +37,9 @@ import com.tekup.realestateapi.repository.UserRepository;
 import com.tekup.realestateapi.service.RealEstateService;
 
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 
 @Service
 public class RealEstateServiceImpl implements RealEstateService {
@@ -387,4 +395,50 @@ public class RealEstateServiceImpl implements RealEstateService {
 	        return new ResponseEntity<>("Real estate not found with ID: " + id, HttpStatus.NOT_FOUND);
 	    }
 	}
+
+	// Pagination and filter by town , field : price , states : RENT or State, state : AVAILABLE or UNAVAILABLE numfloor
+	public List<RealEstate> getRealEstateList(Integer pageNumber, Integer pageSize, String field, String townName, EStates states, EState state, Integer numFloor) {
+	    Sort sort = StringUtils.hasText(field) ? Sort.by(field) : Sort.unsorted();
+	    Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+
+	    if (StringUtils.hasText(townName) && states != null && state != null && numFloor != null) {
+	        // If townName, states, state, and numFloor are provided, filter by all
+	        return realEstateRepository.findByTownNameAndStatesAndStateAndNumFloor(townName, states, state, numFloor, pageable).getContent();
+	    } else if (StringUtils.hasText(townName) && states != null && state == null && numFloor != null) {
+	        // If townName, states, and numFloor are provided, filter by townName, states, and numFloor
+	        return realEstateRepository.findByTownNameAndStatesAndNumFloor(townName, states, numFloor, pageable).getContent();
+	    } else if (StringUtils.hasText(townName) && state != null && states == null && numFloor != null) {
+	        // If townName, state, and numFloor are provided, filter by townName, state, and numFloor
+	        return realEstateRepository.findByTownNameAndStateAndNumFloor(townName, state, numFloor, pageable).getContent();
+	    } else if (StringUtils.hasText(townName) && numFloor != null) {
+	        // If townName and numFloor are provided, filter by townName and numFloor
+	        return realEstateRepository.findByTownNameAndNumFloor(townName, numFloor, pageable).getContent();
+	    } else if (StringUtils.hasText(townName)) {
+	        // If only townName is provided, filter by townName
+	        return realEstateRepository.findByTownName(townName, pageable).getContent();
+	    } else if (states != null && state != null && numFloor != null) {
+	        // If states, state, and numFloor are provided, filter by states, state, and numFloor
+	        return realEstateRepository.findByStatesAndStateAndNumFloor(states, state, numFloor, pageable).getContent();
+	    } else if (states != null && numFloor != null) {
+	        // If states and numFloor are provided, filter by states and numFloor
+	        return realEstateRepository.findByStatesAndNumFloor(states, numFloor, pageable).getContent();
+	    } else if (state != null && numFloor != null) {
+	        // If state and numFloor are provided, filter by state and numFloor
+	        return realEstateRepository.findByStateAndNumFloor(state, numFloor, pageable).getContent();
+	    } else if (states != null) {
+	        // If only states is provided, filter by states
+	        return realEstateRepository.findByStates(states, pageable).getContent();
+	    } else if (state != null) {
+	        // If only state is provided, filter by state
+	        return realEstateRepository.findByState(state, pageable).getContent();
+	    } else if (numFloor != null) {
+	        // If only numFloor is provided, filter by numFloor
+	        return realEstateRepository.findByNumFloor(numFloor, pageable).getContent();
+	    } else {
+	        // If none of the parameters are provided, get all records
+	        return realEstateRepository.findAll(pageable).getContent();
+	    }
+	}
+
+	
 }
