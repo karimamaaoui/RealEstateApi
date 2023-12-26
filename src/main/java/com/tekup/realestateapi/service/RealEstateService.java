@@ -19,6 +19,7 @@ public interface RealEstateService {
 	
 	//List<RealEstate> getRealEstateList(Integer pageNumber,Integer pageSize,String field);
     List<RealEstate> getRealEstateList(Integer pageNumber, Integer pageSize, String field, String townName, EStates states,EState state,Integer numFloor);
+    List<RealEstate> getRealEstateListByCategory(Integer pageNumber, Integer pageSize,String category);
 
 	
 	

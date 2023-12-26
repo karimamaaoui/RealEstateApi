@@ -120,5 +120,14 @@ public class RealEstateController {
         return new ResponseEntity<>(realEstates, HttpStatus.OK);
     }
     
+    @GetMapping("/list-by-category")
+    public ResponseEntity<List<RealEstate>> getRealEstateListByCategory(
+    		   @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
+               @RequestParam(value = "pageSize", defaultValue = "5", required = false) Integer pageSize,
+               @RequestParam String category) {
+        List<RealEstate> realEstateList = realEstateService.getRealEstateListByCategory(pageNumber, pageSize, category);
+        return ResponseEntity.ok(realEstateList);
+    }
+
     
 }

@@ -1,4 +1,4 @@
-package com.tekup.realestateapi.serviceImp;
+/*package com.tekup.realestateapi.serviceImp;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ public class RoleServiceImpl implements RoleService{
     private RoleRepository roleRepository;
     /**
      * add user
-     */
+     
     @Override
     public void addRole(Role role) {
     	roleRepository.save(role);
@@ -49,4 +49,4 @@ public class RoleServiceImpl implements RoleService{
 		return roleRepository.save(role);
 	}
 
-}
+}*/

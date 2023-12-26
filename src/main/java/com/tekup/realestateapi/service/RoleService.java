@@ -1,4 +1,4 @@
-package com.tekup.realestateapi.service;
+/*package com.tekup.realestateapi.service;
 
 import java.util.List;
 
@@ -16,3 +16,4 @@ public interface RoleService {
 
 }
 
+*/
