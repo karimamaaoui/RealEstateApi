@@ -37,4 +37,7 @@ public class Booking {
     @Column(name = "state_booking")
     private StateReservation stateReservation;
 
+    @Column(name = "number_of_days_or_months")
+    private Integer numberOfDaysOrMonths;
+
 }

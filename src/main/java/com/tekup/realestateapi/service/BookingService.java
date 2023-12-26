@@ -10,7 +10,7 @@ public interface BookingService {
 
     ResponseEntity<Booking> getBookingById(Long id);
 
-    ResponseEntity<Booking> saveBooking(Booking booking);
+    ResponseEntity<?> saveBooking(Booking booking);
 
     ResponseEntity<?> deleteBooking(Long id);
 

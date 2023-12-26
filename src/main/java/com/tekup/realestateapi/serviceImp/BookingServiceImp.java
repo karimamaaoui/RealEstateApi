@@ -1,7 +1,11 @@
 package com.tekup.realestateapi.serviceImp;
 
 import com.tekup.realestateapi.models.Booking;
+import com.tekup.realestateapi.models.EState;
+import com.tekup.realestateapi.models.EStates;
+import com.tekup.realestateapi.models.RealEstate;
 import com.tekup.realestateapi.repository.BookingRepository;
+import com.tekup.realestateapi.repository.RealEstateRepository;
 import com.tekup.realestateapi.service.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +21,8 @@ public class BookingServiceImp implements BookingService {
     @Autowired
     private BookingRepository bookingRepository;
 
+    @Autowired
+    private RealEstateRepository estateRepository;
     @Override
     public ResponseEntity<List<Booking>> getAllBookings() {
         List<Booking> bookings = bookingRepository.findAll();
@@ -31,22 +37,52 @@ public class BookingServiceImp implements BookingService {
     }
 
     @Override
-    public ResponseEntity<Booking> saveBooking(Booking booking) {
+    public ResponseEntity<?> saveBooking(Booking booking) {
         try {
-            // You can add additional validation or business logic here if needed
+            Optional<Booking> existingBooking = bookingRepository.findByRealEstate_Id(booking.getRealEstate().getId());
+            if (existingBooking.isPresent()) {
+                return new ResponseEntity<>("A booking already exists for the given real estate", HttpStatus.CONFLICT);
+            }
+
             Booking savedBooking = bookingRepository.save(booking);
+
+            RealEstate realEstate = savedBooking.getRealEstate();
+            if (realEstate != null) {
+                realEstate = estateRepository.getById(realEstate.getId()); 
+                realEstate.setState(EState.UNAVAILABLE);
+                if (EStates.RENT.equals(realEstate.getStates())) {
+                    savedBooking.setNumberOfDaysOrMonths(booking.getNumberOfDaysOrMonths());
+                } else {
+                    savedBooking.setNumberOfDaysOrMonths(0);
+                }
+
+                estateRepository.save(realEstate);
+            }
+
             return new ResponseEntity<>(savedBooking, HttpStatus.CREATED);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
+    
     @Override
     public ResponseEntity<?> deleteBooking(Long id) {
         try {
-            bookingRepository.deleteById(id);
-            return new ResponseEntity<>(HttpStatus.OK);
+            Optional<Booking> bookingOptional = bookingRepository.findById(id);
+            if (bookingOptional.isPresent()) {
+                Booking booking = bookingOptional.get();
+                RealEstate realEstate = booking.getRealEstate();
+                   if (realEstate != null) {
+                    realEstate.setState(EState.AVAILABLE);
+                    estateRepository.save(realEstate);
+                }
+
+                bookingRepository.deleteById(id);
+                return new ResponseEntity<>(HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -74,6 +110,10 @@ public class BookingServiceImp implements BookingService {
 
                 if (updatedBooking.getStateReservation() != null) {
                     existingBooking.setStateReservation(updatedBooking.getStateReservation());
+                }
+
+                if (updatedBooking.getNumberOfDaysOrMonths() != null) {
+                    existingBooking.setNumberOfDaysOrMonths(updatedBooking.getNumberOfDaysOrMonths());
                 }
 
                 Booking updated = bookingRepository.save(existingBooking);

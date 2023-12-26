@@ -26,7 +26,7 @@ public class BookingController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Booking> saveBooking(@RequestBody Booking booking) {
+    public ResponseEntity<?> saveBooking(@RequestBody Booking booking) {
         return bookingService.saveBooking(booking);
     }
 
