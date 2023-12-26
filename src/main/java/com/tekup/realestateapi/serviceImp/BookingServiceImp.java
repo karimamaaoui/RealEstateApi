@@ -89,43 +89,43 @@ public class BookingServiceImp implements BookingService {
         }
     }
 
-    @Override
-    public ResponseEntity<Booking> updateBooking(Long id, Booking updatedBooking) {
-        try {
-            Optional<Booking> bookingOptional = bookingRepository.findById(id);
-            if (bookingOptional.isPresent()) {
-                Booking existingBooking = bookingOptional.get();
+@Override
+public ResponseEntity<Booking> updateBooking(Long id, Booking updatedBooking) {
+    try {
+        Optional<Booking> bookingOptional = bookingRepository.findById(id);
+        if (bookingOptional.isPresent()) {
+            Booking existingBooking = bookingOptional.get();
 
-                if (updatedBooking.getUser() != null) {
-                    existingBooking.setUser(updatedBooking.getUser());
-                }
-
-                if (updatedBooking.getRealEstate() != null) {
-                    existingBooking.setRealEstate(updatedBooking.getRealEstate());
-                }
-
-                if (updatedBooking.getBookingDate() != null) {
-                    existingBooking.setBookingDate(updatedBooking.getBookingDate());
-                }
-
-                if (updatedBooking.getStateReservation() != null) {
-                    existingBooking.setStateReservation(updatedBooking.getStateReservation());
-                }
-
-                if (updatedBooking.getNumberOfDaysOrMonths() != null) {
-                    existingBooking.setNumberOfDaysOrMonths(updatedBooking.getNumberOfDaysOrMonths());
-                }
-
-                Booking updated = bookingRepository.save(existingBooking);
-                return new ResponseEntity<>(updated, HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            if (updatedBooking.getUser() != null) {
+                existingBooking.setUser(updatedBooking.getUser());
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+            if (updatedBooking.getRealEstate() != null) {
+                existingBooking.setRealEstate(updatedBooking.getRealEstate());
+            }
+
+            if (updatedBooking.getBookingDate() != null) {
+                existingBooking.setBookingDate(updatedBooking.getBookingDate());
+            }
+
+            if (updatedBooking.getStateReservation() != null) {
+                existingBooking.setStateReservation(updatedBooking.getStateReservation());
+            }
+
+            if (updatedBooking.getNumberOfDaysOrMonths() != null) {
+                existingBooking.setNumberOfDaysOrMonths(updatedBooking.getNumberOfDaysOrMonths());
+            }
+
+            Booking updated = bookingRepository.save(existingBooking);
+            return new ResponseEntity<>(updated, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    } catch (Exception e) {
+        e.printStackTrace();
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
+}
 
     
 }

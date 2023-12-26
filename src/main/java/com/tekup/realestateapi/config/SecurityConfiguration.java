@@ -38,6 +38,7 @@ public class SecurityConfiguration {
         		.requestMatchers("/country/**").permitAll()
         		.requestMatchers("/visits/**").permitAll()
         		.requestMatchers("/bookings/**").permitAll()
+        		.requestMatchers("/payments/**").permitAll()
         		.requestMatchers("/town/**").hasAnyRole("ADMIN", "CLIENT")
                 .requestMatchers("/realestate/add").hasRole("AGENT")
                 .requestMatchers("/realestate/**").hasAnyRole("ADMIN", "CLIENT","AGENT")
@@ -46,11 +47,6 @@ public class SecurityConfiguration {
         		.requestMatchers("/category/get").hasAnyRole("ADMIN","CLIENT")
         		.requestMatchers("/category/**").hasRole("ADMIN") 
         		.requestMatchers("/users/**").hasRole("ADMIN") 
-        		
-        		
-        		
-        		
-        		
         		.anyRequest().authenticated())
         		.exceptionHandling(ex->ex.authenticationEntryPoint(jwtAuthentication))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)

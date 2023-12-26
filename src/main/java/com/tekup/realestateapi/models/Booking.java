@@ -39,5 +39,8 @@ public class Booking {
 
     @Column(name = "number_of_days_or_months")
     private Integer numberOfDaysOrMonths;
+    @OneToOne(mappedBy = "booking")
+    private Payment payment;
+
 
 }
