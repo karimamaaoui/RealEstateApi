@@ -37,6 +37,7 @@ public class SecurityConfiguration {
         		.requestMatchers("auth/**").permitAll()
         		.requestMatchers("/country/**").permitAll()
         		.requestMatchers("/visits/**").permitAll()
+        		.requestMatchers("/bookings/**").permitAll()
         		.requestMatchers("/town/**").hasAnyRole("ADMIN", "CLIENT")
                 .requestMatchers("/realestate/add").hasRole("AGENT")
                 .requestMatchers("/realestate/**").hasAnyRole("ADMIN", "CLIENT","AGENT")
