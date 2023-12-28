@@ -77,7 +77,19 @@ public class RealEstateController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    
+    @GetMapping("/getList")
+    public ResponseEntity<List<RealEstate>> getAllPost(
+    		@RequestParam(value="pageNumber",defaultValue = "0",required = false)Integer pageNumber,
+    		@RequestParam(value="pageSize",defaultValue = "5",required = false)Integer pageSize,
+    		@RequestParam(value="field",defaultValue = "",required = false)String field,
+            @RequestParam(value = "townName", defaultValue = "", required = false) String townName
+
+
+    		) {
+        List<RealEstate> realEstates = realEstateService.getRealEstateList(pageNumber,pageSize,field,townName);
+        
+        return new ResponseEntity<>(realEstates, HttpStatus.OK);
+    }
     
   /*  @GetMapping("/getAllRealEstates")
     public ResponseEntity<List<RealEstate>> getAllPost(

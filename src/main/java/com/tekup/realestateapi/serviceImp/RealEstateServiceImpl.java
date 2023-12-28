@@ -289,6 +289,14 @@ public class RealEstateServiceImpl implements RealEstateService {
 	public List<RealEstate> getAllRealEstateList() {
 	    return realEstateRepository.findAll();
 	}
+	
+	@Override
+	public List<RealEstate> getRealEstateList(Integer pageNumber, Integer pageSize, String field,String townName) {
+		  Sort sort = StringUtils.hasText(field) ? Sort.by(field) : Sort.unsorted();
+		  Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+	        return realEstateRepository.findByTownName(townName, pageable).getContent();
+
+	}
 
 
 	
