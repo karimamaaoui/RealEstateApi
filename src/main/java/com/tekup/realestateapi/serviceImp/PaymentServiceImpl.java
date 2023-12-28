@@ -43,8 +43,7 @@ public class PaymentServiceImpl implements PaymentService {
             payment.setDateDePaiement(inputPayment.getDateDePaiement());
             payment.setPrice(inputPayment.getPrice());
             payment.setTypePayment(inputPayment.getTypePayment());
-            payment.setBooking(booking); // Associate the existing Booking entity
-
+            payment.setBooking(booking); 
             return paymentRepository.save(payment);
         }
 

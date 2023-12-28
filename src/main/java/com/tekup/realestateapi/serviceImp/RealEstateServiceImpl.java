@@ -241,19 +241,19 @@ public class RealEstateServiceImpl implements RealEstateService {
 	    Sort sort = StringUtils.hasText(field) ? Sort.by(field) : Sort.unsorted();
 	    Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
 
-	    if (StringUtils.hasText(townName) && states != null && state != null && numFloor != null) {
+	    if (!townName.isEmpty() && states != null && state != null && numFloor != null) {
 	        // If townName, states, state, and numFloor are provided, filter by all
 	        return realEstateRepository.findByTownNameAndStatesAndStateAndNumFloor(townName, states, state, numFloor, pageable).getContent();
-	    } else if (StringUtils.hasText(townName) && states != null && state == null && numFloor != null) {
+	    } else if (!townName.isEmpty() && states != null && state == null && numFloor != null) {
 	        // If townName, states, and numFloor are provided, filter by townName, states, and numFloor
 	        return realEstateRepository.findByTownNameAndStatesAndNumFloor(townName, states, numFloor, pageable).getContent();
-	    } else if (StringUtils.hasText(townName) && state != null && states == null && numFloor != null) {
+	    } else if (!townName.isEmpty() && state != null && states == null && numFloor != null) {
 	        // If townName, state, and numFloor are provided, filter by townName, state, and numFloor
 	        return realEstateRepository.findByTownNameAndStateAndNumFloor(townName, state, numFloor, pageable).getContent();
-	    } else if (StringUtils.hasText(townName) && numFloor != null) {
+	    } else if (!townName.isEmpty() && numFloor != null) {
 	        // If townName and numFloor are provided, filter by townName and numFloor
 	        return realEstateRepository.findByTownNameAndNumFloor(townName, numFloor, pageable).getContent();
-	    } else if (StringUtils.hasText(townName)) {
+	    } else if (!townName.isEmpty()) {
 	        // If only townName is provided, filter by townName
 	        return realEstateRepository.findByTownName(townName, pageable).getContent();
 	    } else if (states != null && state != null && numFloor != null) {
@@ -284,6 +284,10 @@ public class RealEstateServiceImpl implements RealEstateService {
 	public List<RealEstate> getRealEstateListByCategory(Integer pageNumber, Integer pageSize, String category) {
 	    Pageable pageable = PageRequest.of(pageNumber, pageSize);
 	    return realEstateRepository.findByCategoryTitle(category, pageable).getContent();
+	}
+	@Override
+	public List<RealEstate> getAllRealEstateList() {
+	    return realEstateRepository.findAll();
 	}
 
 

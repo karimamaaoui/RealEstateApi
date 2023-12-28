@@ -1,5 +1,6 @@
 package com.tekup.realestateapi.controllers;
 
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -115,8 +116,12 @@ public class RealEstateController {
             @RequestParam(value = "numFloor", defaultValue = "0", required = false) Integer numFloor
             
     ) {
-        List<RealEstate> realEstates = realEstateService.getRealEstateList(pageNumber, pageSize, field, townName,states,state,numFloor);
 
+        List<RealEstate> realEstates = realEstateService.getRealEstateList(pageNumber, pageSize, field, townName,states,state,numFloor);
+    	System.out.println("Received request with parameters ");
+
+        System.out.print(realEstates);
+    	
         return new ResponseEntity<>(realEstates, HttpStatus.OK);
     }
     
@@ -129,5 +134,11 @@ public class RealEstateController {
         return ResponseEntity.ok(realEstateList);
     }
 
+    
+    @GetMapping("/allrealestate")
+    public List<RealEstate> getAllList(){
+    	 List<RealEstate> realEstateList = realEstateService.getAllRealEstateList();
+    	 return realEstateList;
+    }
     
 }
